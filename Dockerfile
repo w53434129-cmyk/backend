@@ -1,13 +1,10 @@
-# Build stage
-FROM maven:3.9.6-eclipse-temurin-17 AS build
-WORKDIR /build
-COPY pom.xml .
-COPY src ./src
-RUN mvn clean package -DskipTests
-
-# Runtime stage
+# Use a valid Java 17 image
 FROM eclipse-temurin:17-jdk
 WORKDIR /app
-COPY --from=build /build/target/*.jar app.jar
+
+# Copy built jar (to be built by Jenkins)
+COPY target/backend.jar .
+
 EXPOSE 8080
-CMD ["java", "-jar", "app.jar"]
+
+CMD ["java", "-jar", "backend.jar"]
