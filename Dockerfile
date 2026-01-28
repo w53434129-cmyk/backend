@@ -1,5 +1,5 @@
 # Use a valid Java 17 image
-FROM eclipse-temurin:17-jdk-slim
+FROM eclipse-temurin:17-jdk
 WORKDIR /app
 
 # Copy built jar (to be built by Jenkins)
