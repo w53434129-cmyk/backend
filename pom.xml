@@ -13,11 +13,11 @@
     <name>backend</name>
     <description>Backend project with Spring Boot, JUnit5, JaCoCo, SonarQube</description>
 
-    <!-- ===== Spring Boot parent ===== -->
+    <!-- Spring Boot parent -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.3</version> <!-- hard-coded version -->
+        <version>3.3.3</version>
         <relativePath/>
     </parent>
 
@@ -27,13 +27,19 @@
     </properties>
 
     <dependencies>
-        <!-- Spring Boot Starter -->
+        <!-- Core Spring Boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
 
-        <!-- Spring Boot Test -->
+        <!-- Spring Web (needed for TestRestTemplate & REST controllers) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- Spring Boot Test (JUnit5, Mockito) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -74,20 +80,18 @@
                 </configuration>
             </plugin>
 
-            <!-- JaCoCo Maven Plugin -->
+            <!-- JaCoCo Plugin -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${jacoco.version}</version>
                 <executions>
-                    <!-- Prepare agent for tests -->
                     <execution>
                         <id>prepare-agent</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
-                    <!-- Generate coverage report after tests -->
                     <execution>
                         <id>report</id>
                         <phase>verify</phase>
@@ -98,7 +102,7 @@
                 </executions>
             </plugin>
 
-            <!-- Maven Surefire Plugin for JUnit5 -->
+            <!-- Surefire Plugin for JUnit5 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -108,7 +112,7 @@
                 </configuration>
             </plugin>
 
-            <!-- SonarQube Maven Plugin -->
+            <!-- Sonar Maven Plugin -->
             <plugin>
                 <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
