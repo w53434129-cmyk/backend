@@ -1,8 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
+         https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.example</groupId>
@@ -11,10 +10,14 @@
     <packaging>jar</packaging>
 
     <name>backend</name>
+    <description>Backend service</description>
 
     <properties>
         <java.version>17</java.version>
-        <spring.boot.version>3.2.2</spring.boot.version>
+        <spring.boot.version>3.3.2</spring.boot.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/jacoco-report/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
     </properties>
 
     <dependencyManagement>
@@ -36,13 +39,7 @@
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
 
-        <!-- Spring Boot Web (for REST endpoints) -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <!-- Spring Boot Test -->
+        <!-- Spring Boot Test (JUnit 5 + TestRestTemplate) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -60,7 +57,7 @@
 
     <build>
         <plugins>
-            <!-- Compiler plugin -->
+            <!-- Maven Compiler Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -68,15 +65,66 @@
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                    <encoding>UTF-8</encoding>
                 </configuration>
+            </plugin>
+
+            <!-- JaCoCo Plugin for code coverage -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.10</version>
+                <executions>
+                    <!-- Prepare agent before tests -->
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+
+                    <!-- Generate XML report after tests -->
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/jacoco-report</outputDirectory>
+                            <dataFile>${project.build.directory}/jacoco.exec</dataFile>
+                            <formats>
+                                <format>xml</format>
+                            </formats>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <!-- Spring Boot Maven Plugin -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring.boot.version}</version>
+            </plugin>
+
+            <!-- Maven Surefire Plugin for running JUnit 5 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.1.2</version>
+                <configuration>
+                    <useModulePath>false</useModulePath>
+                </configuration>
             </plugin>
         </plugins>
     </build>
+
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
+    </repositories>
 
 </project>
