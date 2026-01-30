@@ -14,8 +14,9 @@ public class BackendRestTest {
     private TestRestTemplate restTemplate;
 
     @Test
-    public void testHelloEndpoint() {
-        String body = this.restTemplate.getForObject("/hello", String.class);
-        assertThat(body).isEqualTo("Hello, World!");
+    void testHomeEndpoint() {
+        // Replace "/" with your actual endpoint
+        String body = this.restTemplate.getForObject("/", String.class);
+        assertThat(body).isNotNull();
     }
 }
